@@ -1,50 +1,60 @@
-import contants from "../constants.js";
+import constants from "../constants.js";
+
 export const errorHandler = (err, req, res, next) => {
-    const statusCode = res.statusCode ? res.statusCode : 500;
+  // If headers already sent, let Express handle it
+  if (res.headersSent) {
+    return next(err);
+  }
 
-    switch (statusCode) {
-        case contants.VALIDATION_ERROR:
-            res.json({
-                title: "validation error",
-                stackTrace: err.stack,
-                message: err.message
+  const statusCode = res.statusCode ? res.statusCode : 500;
 
-            })
-            break;
-        case contants.UNAUTHORIZED_ERROR:
-            res.json({
-                title: "unAuthorized error",
-                stackTrace: err.stack,
-                message: err.message
-            })
-            break;
-        case contants.FORBIDDEN:
-            res.json({
-                title: "forbidden error",
-                stackTrace: err.stack,
-                message: err.message
-            })
-            break;
-        case contants.NOT_FOUND:
-            res.json({
-                title: "unAuthorized error",
-                stackTrace: err.stack,
-                message: err.message
-            })
-            break;
-        case contants.SERVER_ERROR:
-            res.json({
-                title: "unAuthorized error",
-                stackTrace: err.stack,
-                message: err.message
-            })
-            break;
-        default:
-            console.log("No error all good");
-            break;
-    }
-    res.json({
+  switch (statusCode) {
+    case constants.VALIDATION_ERROR:
+      res.status(statusCode).json({
+        title: "Validation Error",
         message: err.message,
-        stackTrace: err.stack
-    })
-}
+        stackTrace: err.stack,
+      });
+      break;
+
+    case constants.UNAUTHORIZED_ERROR:
+      res.status(statusCode).json({
+        title: "Unauthorized Error",
+        message: err.message,
+        stackTrace: err.stack,
+      });
+      break;
+
+    case constants.FORBIDDEN:
+      res.status(statusCode).json({
+        title: "Forbidden Error",
+        message: err.message,
+        stackTrace: err.stack,
+      });
+      break;
+
+    case constants.NOT_FOUND:
+      res.status(statusCode).json({
+        title: "Not Found",
+        message: err.message,
+        stackTrace: err.stack,
+      });
+      break;
+
+    case constants.SERVER_ERROR:
+      res.status(statusCode).json({
+        title: "Server Error",
+        message: err.message,
+        stackTrace: err.stack,
+      });
+      break;
+
+    default:
+      res.status(500).json({
+        title: "Unknown Error",
+        message: err.message,
+        stackTrace: err.stack,
+      });
+      break;
+  }
+};

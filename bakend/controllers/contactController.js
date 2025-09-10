@@ -3,8 +3,9 @@ import { Contact } from '../models/contactModel.js';
 
 //@desc Get all contacts
 //@route GET /api/contact
-export const getContacts = asyncHandler(async (req, res) => {
-    const contacts = await Contact.find();
+export const getContacts = asyncHandler(async(req, res) => {
+    // i want to fetch all contacts from database
+    const contacts =await Contact.find();
     res.status(200).json(contacts);
 });
 
@@ -59,4 +60,11 @@ export const deleteContact = asyncHandler(async (req, res) => {
     }
     await contact.deleteOne();
     res.status(200).json({ message: "Contact deleted", contact });
+});
+
+//@desc Delete all contacts
+//@route DELETE /api/contact
+export const delteAllContacts = asyncHandler(async (req, res) => {
+    await Contact.deleteMany();
+    res.status(200).json({ message: "All contacts deleted" });
 });
